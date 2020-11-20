@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Col, Button } from "react-bootstrap";
+import { createProject } from "./projectSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectErrors } from "./projectSlice";
+import classnames from "classnames";
 
 function AddProject(props) {
+  const dispatch = useDispatch();
+  const errors = useSelector(selectErrors);
+
   const [form, setFormState] = useState({
     projectName: "",
     projectIdentifier: "",
@@ -9,6 +16,18 @@ function AddProject(props) {
     startDate: "",
     endDate: "",
   });
+
+  const [validationErrors, setValidationErrors] = useState({
+    validationErrors: {},
+  });
+
+  useEffect(() => {
+    setValidationErrors({
+      projectName: errors.projectName,
+      projectIdentifier: errors.projectIdentifier,
+      description: errors.description,
+    });
+  }, [errors]);
 
   const handleChange = (e) => {
     setFormState({
@@ -27,6 +46,7 @@ function AddProject(props) {
       endDate: form.endDate,
     };
     console.log(newProject);
+    dispatch(createProject(newProject, props.history));
   };
 
   return (
@@ -43,10 +63,18 @@ function AddProject(props) {
             <Col>
               <Form.Control
                 type="text"
+                className={classnames("", {
+                  "is-invalid": validationErrors.projectName,
+                })}
                 name="projectName"
                 value={form.projectName}
                 onChange={handleChange}
               />
+              {validationErrors.projectName && (
+                <div className="invalid-feedback">
+                  {validationErrors.projectName}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
@@ -59,12 +87,20 @@ function AddProject(props) {
               {" "}
               <Form.Control
                 type="text"
-                disabled
+                //disabled
+                className={classnames("", {
+                  "is-invalid": validationErrors.projectIdentifier,
+                })}
                 placeholder="Project Identifier"
                 name="projectIdentifier"
                 value={form.projectIdentifier}
                 onChange={handleChange}
               />
+              {validationErrors.projectName && (
+                <div className="invalid-feedback">
+                  {validationErrors.projectIdentifier}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
@@ -77,11 +113,19 @@ function AddProject(props) {
               {" "}
               <Form.Control
                 as="textarea"
+                className={classnames("", {
+                  "is-invalid": validationErrors.description,
+                })}
                 rows={3}
                 name="description"
                 value={form.description}
                 onChange={handleChange}
               />
+              {validationErrors.projectName && (
+                <div className="invalid-feedback">
+                  {validationErrors.description}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
