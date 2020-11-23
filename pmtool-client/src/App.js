@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard";
 import Header from "./components/layout/Header";
 import { Container } from "react-bootstrap";
 import AddProject from "./components/project/AddProject";
+import UpdateProject from "./components/project/UpdateProject";
 import Login from "./components/layout/Login";
 import SignUp from "./components/layout/SignUp";
 
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/" component={Dashboard} />
         <Route exact path="/dashboard" component={Dashboard} />
         <Route path="/addProject" component={AddProject} />
+        <Route path="/updateProject/:id" component={UpdateProject} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={SignUp} />
       </Container>

@@ -13,6 +13,17 @@ export const getProjects = createAsyncThunk(
       .then((json) => json);
   }
 );
+export const getProject = createAsyncThunk(
+  "project/getProject",
+  (id, history) => {
+    return fetch(`http://localhost:8080/api/v1/project/${id}`)
+      .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then((json) => json);
+  }
+);
 
 export const projectSlice = createSlice({
   name: "project",
@@ -41,10 +52,22 @@ export const projectSlice = createSlice({
       state.status = "succeeded";
       state.projects = action.payload;
     },
+    [getProject.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getProject.rejected]: (state, action) => {
+      state.status = "failed";
+    },
+    [getProject.fulfilled]: (state, action) => {
+      state.status = "succeeded";
+      state.project = action.payload;
+    },
   },
 });
 export const selectErrors = (state) => state.project.errors;
 export const selectProjects = (state) => state.project.projects;
+export const selectStatus = (state) => state.project.status;
+export const selectProject = (state) => state.project.project;
 const { loadErrors, createProjectSuccess } = projectSlice.actions;
 export default projectSlice.reducer;
 

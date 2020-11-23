@@ -7,6 +7,7 @@ import {
   faProjectDiagram,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 function ProjectItem(props) {
   const { projects } = props;
@@ -40,7 +41,10 @@ function ProjectItem(props) {
                     </Card.Link>
                   </ListGroup.Item>
                   <ListGroup.Item className="border border-info rounded-bottom">
-                    <Card.Link href="/updateProject">
+                    <Card.Link
+                      as={Link}
+                      to={`/updateProject/${project.projectIdentifier}`}
+                    >
                       <FontAwesomeIcon icon={faEdit} /> Update Project
                     </Card.Link>
                   </ListGroup.Item>
