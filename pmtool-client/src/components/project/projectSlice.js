@@ -19,6 +19,7 @@ export const getProject = createAsyncThunk(
     return fetch(`http://localhost:8080/api/v1/project/${id}`)
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
+
         return response.json();
       })
       .then((json) => json);
@@ -37,6 +38,10 @@ export const projectSlice = createSlice({
     loadErrors: (state, action) => {
       state.errors = action.payload;
     },
+    clearErrors: (state) => {
+      state.errors = {};
+    },
+
     createProjectSuccess: (state, action) => {
       state.project = action.payload;
     },
@@ -55,7 +60,7 @@ export const projectSlice = createSlice({
     [getProject.pending]: (state) => {
       state.status = "loading";
     },
-    [getProject.rejected]: (state, action) => {
+    [getProject.rejected]: (state) => {
       state.status = "failed";
     },
     [getProject.fulfilled]: (state, action) => {
@@ -68,7 +73,7 @@ export const selectErrors = (state) => state.project.errors;
 export const selectProjects = (state) => state.project.projects;
 export const selectStatus = (state) => state.project.status;
 export const selectProject = (state) => state.project.project;
-const { loadErrors, createProjectSuccess } = projectSlice.actions;
+const { loadErrors, clearErrors, createProjectSuccess } = projectSlice.actions;
 export default projectSlice.reducer;
 
 export const createProject = (project, history) => async (dispatch) => {
@@ -78,6 +83,7 @@ export const createProject = (project, history) => async (dispatch) => {
       project
     );
     dispatch(createProjectSuccess(response.data));
+    dispatch(clearErrors());
     history.push("/dashboard");
   } catch (e) {
     console.log(e.data);
