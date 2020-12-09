@@ -13,6 +13,7 @@ export const getProjects = createAsyncThunk(
       .then((json) => json);
   }
 );
+/*
 export const getProject = createAsyncThunk(
   "project/getProject",
   (id, history) => {
@@ -23,6 +24,25 @@ export const getProject = createAsyncThunk(
         return response.json();
       })
       .then((json) => json);
+  }
+);
+*/
+
+export const getProject = createAsyncThunk(
+  "project/getProject",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/project/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -60,8 +80,9 @@ export const projectSlice = createSlice({
     [getProject.pending]: (state) => {
       state.status = "loading";
     },
-    [getProject.rejected]: (state) => {
+    [getProject.rejected]: (state, action) => {
       state.status = "failed";
+      state.errors = action.payload;
     },
     [getProject.fulfilled]: (state, action) => {
       state.status = "succeeded";

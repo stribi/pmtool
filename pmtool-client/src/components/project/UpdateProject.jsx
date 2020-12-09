@@ -35,13 +35,13 @@ function UpdateProject(props) {
   const { id } = props.match.params;
 
   useEffect(() => {
-    dispatch(getProject(id, props.history));
-    console.log("1. useEffect: " + project.id);
-  }, [dispatch]);
+    dispatch(getProject(id));
+    //console.log("1. useEffect: " + project.id);
+  }, [dispatch, id]);
 
   useEffect(() => {
-    //dispatch(getProject(id, props.history));
-    console.log("2.1. useEffect: " + project.id);
+    //dispatch(getProject(id));
+    //console.log("2.1. useEffect: " + project.id);
     if (project.id !== undefined)
       setFormState({
         id: project.id,
@@ -51,13 +51,15 @@ function UpdateProject(props) {
         startDate: project.startDate,
         endDate: project.endDate,
       });
-    console.log("2.2. useEffect: " + project.id);
+    //console.log("2.2. useEffect: " + project.id);
+
     setValidationErrors({
       projectName: errors.projectName,
       projectIdentifier: errors.projectIdentifier,
       description: errors.description,
     });
-  }, [project, errors]);
+  }, [project, errors, project.id]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const newProject = {
@@ -89,7 +91,7 @@ function UpdateProject(props) {
                 className={classnames("", {
                   "is-invalid": validationErrors.projectName,
                 })}
-                value={form.projectName}
+                value={form.projectName || ""}
                 onChange={handleChange}
               />
               {validationErrors.projectName && (
@@ -100,6 +102,7 @@ function UpdateProject(props) {
             </Col>
           </Form.Row>
         </Form.Group>
+
         <Form.Group controlId="projectIdentifier">
           <Form.Row>
             <Col md={2}>
@@ -115,10 +118,10 @@ function UpdateProject(props) {
                 })}
                 placeholder="Project Identifier"
                 name="projectIdentifier"
-                value={form.projectIdentifier}
+                value={form.projectIdentifier || ""}
                 onChange={handleChange}
               />
-              {validationErrors.projectName && (
+              {validationErrors.projectIdentifier && (
                 <div className="invalid-feedback">
                   {validationErrors.projectIdentifier}
                 </div>
@@ -140,7 +143,7 @@ function UpdateProject(props) {
                 })}
                 rows={3}
                 name="description"
-                value={form.description}
+                value={form.description || ""}
                 onChange={handleChange}
               />
               {validationErrors.description && (
@@ -163,7 +166,7 @@ function UpdateProject(props) {
                 type="date"
                 placeholder="Start Date"
                 name="startDate"
-                value={form.startDate}
+                value={form.startDate || ""}
                 onChange={handleChange}
               />
             </Col>
@@ -180,7 +183,7 @@ function UpdateProject(props) {
                 type="date"
                 placeholder="End Date"
                 name="endDate"
-                value={form.endDate}
+                value={form.endDate || ""}
                 onChange={handleChange}
               />
             </Col>
