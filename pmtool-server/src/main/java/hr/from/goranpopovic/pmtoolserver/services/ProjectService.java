@@ -3,8 +3,10 @@ package hr.from.goranpopovic.pmtoolserver.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hr.from.goranpopovic.pmtoolserver.domain.Backlog;
 import hr.from.goranpopovic.pmtoolserver.domain.Project;
 import hr.from.goranpopovic.pmtoolserver.exceptions.ProjectIdException;
+import hr.from.goranpopovic.pmtoolserver.repositories.BacklogRepository;
 import hr.from.goranpopovic.pmtoolserver.repositories.ProjectRepository;
 
 @Service
@@ -12,11 +14,23 @@ public class ProjectService {
 	
 	@Autowired
 	private ProjectRepository projectRepository;
+	@Autowired
+	private BacklogRepository backlogRepository;
 	
 	public Project saveOrUpdateProject(Project project) {
 		
 		try {
 			project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+			if(project.getId() == null) {
+				Backlog backlog = new Backlog();
+				project.setBacklog(backlog);
+				backlog.setProject(project);
+				backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+			}
+			
+			if(project.getId() != null) {
+				project.setBacklog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
+			}
 			return projectRepository.save(project);
 			
 		} catch (Exception e) {
