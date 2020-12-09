@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, ListGroup } from "react-bootstrap";
+import { Row, Col, ListGroup, Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,9 +8,17 @@ import {
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteProject } from "./projectSlice";
 
 function ProjectItem(props) {
   const { projects } = props;
+  const dispatch = useDispatch();
+
+  const handleDelete = (id) => {
+    dispatch(deleteProject(id));
+  };
+
   return (
     <React.Fragment>
       {projects.map((project) => (
@@ -49,12 +57,16 @@ function ProjectItem(props) {
                     </Card.Link>
                   </ListGroup.Item>
                   <ListGroup.Item
-                    disabled
+                    //disabled
                     className="border border-info rounded-bottom"
                   >
-                    <Card.Link href="/deleteProject">
+                    <Button
+                      variant="danger"
+                      block
+                      onClick={() => handleDelete(project.projectIdentifier)}
+                    >
                       <FontAwesomeIcon icon={faTrashAlt} /> Delete Project
-                    </Card.Link>
+                    </Button>
                   </ListGroup.Item>
                 </ListGroup>
               </Col>

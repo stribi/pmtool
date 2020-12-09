@@ -96,7 +96,7 @@ function AddProject(props) {
                 value={form.projectIdentifier}
                 onChange={handleChange}
               />
-              {validationErrors.projectName && (
+              {validationErrors.projectIdentifier && (
                 <div className="invalid-feedback">
                   {validationErrors.projectIdentifier}
                 </div>
@@ -121,7 +121,7 @@ function AddProject(props) {
                 value={form.description}
                 onChange={handleChange}
               />
-              {validationErrors.projectName && (
+              {validationErrors.description && (
                 <div className="invalid-feedback">
                   {validationErrors.description}
                 </div>
