@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hr.from.goranpopovic.pmtoolserver.domain.ProjectTask;
+import hr.from.goranpopovic.pmtoolserver.exceptions.ProjectNotFoundException;
 import hr.from.goranpopovic.pmtoolserver.services.MapValidationErrorsService;
 import hr.from.goranpopovic.pmtoolserver.services.ProjectTaskService;
 
@@ -44,5 +45,12 @@ public class BacklogController {
 	public Iterable<ProjectTask> getProjectBacklog(@PathVariable String backlog_id){
 		return projectTaskService.findBacklogById(backlog_id);
 		
+	}
+	
+	@GetMapping("/{backlog_id}/{pt_sequence}")
+	public ResponseEntity<?> getPTByProjectSequence(@PathVariable String backlog_id, @PathVariable String pt_sequence) {
+		ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backlog_id, pt_sequence);
+		if(projectTask == null) throw new ProjectNotFoundException("Can not find ProjectTask with sequence '" + pt_sequence + "'" );
+		return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);
 	}
 }

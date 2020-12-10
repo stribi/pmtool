@@ -66,5 +66,10 @@ public class ProjectTaskService {
 		if(project == null) throw new ProjectNotFoundException("Project with ID: '" + id + "' does not exist");
 		return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
 	}
+	
+	public ProjectTask findProjectTaskByProjectSequence(String backlog_id, String sequence) {
+		//make sure we are searching on the right backlog
+		return projectTaskRepository.findByProjectSequence(sequence);
+	}
 
 }
