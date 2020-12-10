@@ -1,5 +1,7 @@
 package hr.from.goranpopovic.pmtoolserver.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,9 +88,22 @@ public class ProjectTaskService {
 	}
 	
 	public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String sequence) {
-		ProjectTask projectTask = projectTaskRepository.findByProjectSequence(sequence);
+		ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, sequence);
 		projectTask = updatedTask;
 		return projectTaskRepository.save(projectTask);
+	}
+	
+	public void deleteProjectTaskByProjectSequence(String backlog_id, String sequence) {
+		ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, sequence);
+		
+		/*
+		Backlog backlog = projectTask.getBacklog();
+		List<ProjectTask> lpt = backlog.getProjectTasks();
+		lpt.remove(projectTask);
+		backlogRepository.save(backlog);
+		*/
+		
+		projectTaskRepository.delete(projectTask);
 	}
 	
 
