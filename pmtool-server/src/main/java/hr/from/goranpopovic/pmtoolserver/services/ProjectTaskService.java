@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hr.from.goranpopovic.pmtoolserver.domain.Backlog;
+import hr.from.goranpopovic.pmtoolserver.domain.Project;
 import hr.from.goranpopovic.pmtoolserver.domain.ProjectTask;
 import hr.from.goranpopovic.pmtoolserver.exceptions.ProjectNotFoundException;
 import hr.from.goranpopovic.pmtoolserver.repositories.BacklogRepository;
+import hr.from.goranpopovic.pmtoolserver.repositories.ProjectRepository;
 import hr.from.goranpopovic.pmtoolserver.repositories.ProjectTaskRepository;
 
 @Service
@@ -17,6 +19,9 @@ public class ProjectTaskService {
 	
 	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
+	
+	@Autowired
+	private ProjectRepository projectRepository;
 	
 	public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
 		
@@ -57,7 +62,8 @@ public class ProjectTaskService {
 	}
 
 	public Iterable<ProjectTask> findBacklogById(String id) {
-		
+		Project project = projectRepository.findByProjectIdentifier(id);
+		if(project == null) throw new ProjectNotFoundException("Project with ID: '" + id + "' does not exist");
 		return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
 	}
 
