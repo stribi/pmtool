@@ -5,5 +5,6 @@ export default configureStore({
   reducer: {
     counter: counterReducer,
     project: projectReducer,
+    backlog: backlogReducer,
   },
 });
