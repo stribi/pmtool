@@ -1,13 +1,53 @@
-import React from "react";
-import { Button, Col, Form, Nav } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addProjectTask } from "./../../backlog/backlogSlice";
 
 function AddProjectTask(props) {
   const { id } = props.match.params;
+
+  const dispatch = useDispatch();
+
+  const [form, setFormState] = useState({
+    summary: "",
+    acceptanceCriteria: "",
+    dueDate: "",
+    priority: 0,
+    status: "",
+  });
+
+  //onChange
+  const handleChange = (e) => {
+    setFormState({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //onSubmit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const projectTask = {
+      summary: form.summary,
+      acceptanceCriteria: form.acceptanceCriteria,
+      dueDate: form.dueDate,
+      priority: form.priority,
+      status: form.status,
+    };
+    //console.log(projectTask);
+    dispatch(
+      addProjectTask({
+        backlog_id: id,
+        projectTask: projectTask,
+        history: props.history,
+      })
+    );
+  };
+
   return (
     <div>
       <br />
-
       <Button
         as={Link}
         variant="outline-info"
@@ -19,14 +59,19 @@ function AddProjectTask(props) {
       <hr />
       <h2>Add Project Task</h2>
       <br />
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="summary">
           <Form.Row>
             <Col md={2}>
               <Form.Label>Project Task Summary</Form.Label>
             </Col>
             <Col>
-              <Form.Control type="text" name="summary" />
+              <Form.Control
+                type="text"
+                name="summary"
+                value={form.summary}
+                onChange={handleChange}
+              />
             </Col>
           </Form.Row>
         </Form.Group>
@@ -36,7 +81,13 @@ function AddProjectTask(props) {
               <Form.Label>Acceptance Criteria</Form.Label>
             </Col>
             <Col>
-              <Form.Control as="textarea" rows={3} name="acceptanceCriteria" />
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="acceptanceCriteria"
+                value={form.acceptanceCriteria}
+                onChange={handleChange}
+              />
             </Col>
           </Form.Row>
         </Form.Group>
@@ -46,7 +97,12 @@ function AddProjectTask(props) {
               <Form.Label>Due Date</Form.Label>
             </Col>
             <Col>
-              <Form.Control type="date" name="dueDate" />
+              <Form.Control
+                type="date"
+                name="dueDate"
+                value={form.dueDate}
+                onChange={handleChange}
+              />
             </Col>
           </Form.Row>
         </Form.Group>
@@ -56,7 +112,12 @@ function AddProjectTask(props) {
               <Form.Label>Select Priority</Form.Label>
             </Col>
             <Col>
-              <Form.Control as="select">
+              <Form.Control
+                as="select"
+                name="priority"
+                value={form.priority}
+                onChange={handleChange}
+              >
                 <option value={0}>Select Priority</option>
                 <option value={1}>High</option>
                 <option value={2}>Medium</option>
@@ -71,7 +132,12 @@ function AddProjectTask(props) {
               <Form.Label>Select Status</Form.Label>
             </Col>
             <Col>
-              <Form.Control as="select">
+              <Form.Control
+                as="select"
+                name="status"
+                value={form.status}
+                onChange={handleChange}
+              >
                 <option value="">Select Status</option>
                 <option value="TODO">TODO</option>
                 <option value="IN_PROGRESS">IN PROGRESS</option>
