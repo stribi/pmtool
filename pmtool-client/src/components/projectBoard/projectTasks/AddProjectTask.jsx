@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addProjectTask } from "./../../backlog/backlogSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addProjectTask, selectErrors } from "./../../backlog/backlogSlice";
+import classnames from "classnames";
 
 function AddProjectTask(props) {
   const { id } = props.match.params;
 
   const dispatch = useDispatch();
+  const errors = useSelector(selectErrors);
 
   const [form, setFormState] = useState({
     summary: "",
@@ -16,6 +18,16 @@ function AddProjectTask(props) {
     priority: 0,
     status: "",
   });
+
+  const [validationErrors, setValidationErrors] = useState({
+    validationErrors: {},
+  });
+
+  useEffect(() => {
+    setValidationErrors({
+      summary: errors.summary,
+    });
+  }, [errors]);
 
   //onChange
   const handleChange = (e) => {
@@ -68,10 +80,18 @@ function AddProjectTask(props) {
             <Col>
               <Form.Control
                 type="text"
+                className={classnames("", {
+                  "is-invalid": validationErrors.summary,
+                })}
                 name="summary"
                 value={form.summary}
                 onChange={handleChange}
               />
+              {validationErrors.summary && (
+                <div className="invalid-feedback">
+                  {validationErrors.summary}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
