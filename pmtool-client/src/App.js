@@ -11,6 +11,7 @@ import Login from "./components/layout/Login";
 import SignUp from "./components/layout/SignUp";
 import ProjectBoard from "./components/projectBoard/ProjectBoard";
 import AddProjectTask from "./components/projectBoard/projectTasks/AddProjectTask";
+import UpdateProjectTask from "./components/projectBoard/projectTasks/UpdateProjectTask";
 
 function App() {
   return (
@@ -23,6 +24,10 @@ function App() {
         <Route path="/updateProject/:id" component={UpdateProject} />
         <Route path="/projectBoard/:id" component={ProjectBoard} />
         <Route path="/addProjectTask/:id" component={AddProjectTask} />
+        <Route
+          path="/updateProjectTask/:backlog_id/:pt_sequence"
+          component={UpdateProjectTask}
+        />
         <Route exact path="/login" component={Login} />
         <Route exact path="/register" component={SignUp} />
       </Container>

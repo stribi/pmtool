@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function ProjectTask(props) {
   const { projectTask } = props;
@@ -30,7 +31,12 @@ function ProjectTask(props) {
           {projectTask.status}
         </Card.Subtitle>
         <Card.Text>{projectTask.acceptanceCriteria}</Card.Text>
-        <Card.Link>View</Card.Link>
+        <Card.Link
+          as={Link}
+          to={`/updateProjectTask/${projectTask.projectIdentifier}/${projectTask.projectSequence}`}
+        >
+          Detail
+        </Card.Link>
         <Button style={{ marginLeft: "20px" }} variant="danger">
           Delete
         </Button>

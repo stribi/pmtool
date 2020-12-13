@@ -29,9 +29,13 @@ function ProjectBoard(props) {
         );
       } else {
         return (
-          <div className="alert alert-info text-center">
-            No Project Tasks on this Board
-          </div>
+          <React.Fragment>
+            <CreateProjectTaskButton id={id} />
+            <hr />
+            <div className="alert alert-info text-center">
+              No Project Tasks on this Board
+            </div>
+          </React.Fragment>
         );
       }
     } else {

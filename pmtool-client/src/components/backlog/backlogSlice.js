@@ -17,12 +17,30 @@ export const addProjectTask = createAsyncThunk(
   }
 );
 
-//Get All Project Task
+//get All Project Tasks
 export const getProjectTasks = createAsyncThunk(
   "backlog/getProjectTasks",
   async (backlog_id, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/v1/backlog/${backlog_id}`);
+      return response.data;
+    } catch (err) {
+      let error = err;
+      if (!error.response) throw error;
+
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+//get Project Task By id
+export const getProjectTask = createAsyncThunk(
+  "backlog/getProjectTask",
+  async ({ backlog_id, pt_sequence }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `/api/v1/backlog/${backlog_id}/${pt_sequence}`
+      );
       return response.data;
     } catch (err) {
       let error = err;
@@ -66,8 +84,23 @@ export const backlogSlice = createSlice({
       state.errors = {};
       state.projectTasks = action.payload;
     },
+
+    [getProjectTask.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getProjectTask.rejected]: (state, action) => {
+      state.status = "failed";
+      state.errors = action.payload;
+    },
+    [getProjectTask.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.errors = {};
+      state.projectTask = action.payload;
+    },
   },
 });
 export const selectErrors = (state) => state.backlog.errors;
+export const selectBacklog = (state) => state.backlog;
 export const selectProjectTasks = (state) => state.backlog.projectTasks;
+export const selectProjectTask = (state) => state.backlog.projectTask;
 export default backlogSlice.reducer;
