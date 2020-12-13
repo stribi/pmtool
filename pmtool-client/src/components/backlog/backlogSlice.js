@@ -20,11 +20,16 @@ export const addProjectTask = createAsyncThunk(
 //Get All Project Task
 export const getProjectTasks = createAsyncThunk(
   "backlog/getProjectTasks",
-  async (backlog_id) => {
+  async (backlog_id, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/v1/backlog/${backlog_id}`);
       return response.data;
-    } catch (error) {}
+    } catch (err) {
+      let error = err;
+      if (!error.response) throw error;
+
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
