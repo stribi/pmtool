@@ -16,6 +16,27 @@ export const addProjectTask = createAsyncThunk(
     }
   }
 );
+//Update Project Task
+export const updateProjectTask = createAsyncThunk(
+  "backlog/updateProjectTask",
+  async (
+    { backlog_id, projectTask, pt_sequence, history },
+    { rejectWithValue }
+  ) => {
+    try {
+      await axios.patch(
+        `/api/v1/backlog/${backlog_id}/${pt_sequence}`,
+        projectTask
+      );
+      history.push(`/projectBoard/${backlog_id}`);
+    } catch (err) {
+      let error = err;
+      if (!error.response) throw error;
+
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 //get All Project Tasks
 export const getProjectTasks = createAsyncThunk(
@@ -96,6 +117,17 @@ export const backlogSlice = createSlice({
       state.status = "idle";
       state.errors = {};
       state.projectTask = action.payload;
+    },
+    [updateProjectTask.pending]: (state) => {
+      state.status = "loading";
+    },
+    [updateProjectTask.rejected]: (state, action) => {
+      state.status = "failed";
+      state.errors = action.payload;
+    },
+    [updateProjectTask.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.errors = {};
     },
   },
 });

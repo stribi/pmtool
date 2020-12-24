@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getProjectTask,
   selectBacklog,
-  addProjectTask,
+  updateProjectTask,
+  //addProjectTask,
   //selectProjectTask,
 } from "./../../backlog/backlogSlice";
 import classnames from "classnames";
@@ -63,8 +64,9 @@ function UpdateProjectTask(props) {
     };
     console.log(projectTaskToUpdate);
     dispatch(
-      addProjectTask({
+      updateProjectTask({
         backlog_id: b_id,
+        pt_sequence: pt_id,
         projectTask: projectTaskToUpdate,
         history: props.history,
       })
@@ -83,7 +85,11 @@ function UpdateProjectTask(props) {
         Back to Project Board
       </Button>
       <hr />
-      <h2>Update Project Task</h2>
+      <h2>Update Project Task {projectTask.projectSequence}</h2>
+      <p className="lead text-center">
+        Project Name: {projectTask.projectIdentifier} + Project Task ID:{" "}
+        {projectTask.projectSequence}
+      </p>
       <br />
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="summary">
