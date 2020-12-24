@@ -10,7 +10,7 @@ function Dashboard(props) {
 
   useEffect(() => {
     dispatch(getProjects("http://localhost:8080/api/v1/project/all"));
-  }, []);
+  }, [dispatch]);
   return (
     <div md={12} className="text-align-left margin-top-bottom">
       <h2>Projects</h2>

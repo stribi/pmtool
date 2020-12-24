@@ -13,7 +13,7 @@ function Backlog(props) {
   let inProgressTasks = [];
 
   for (let i = 0; i < tasks.length; i++) {
-    console.log(tasks[i]);
+    //console.log(tasks[i]);
     if (tasks[i].props.projectTask.status === "TODO") {
       todoTasks.push(tasks[i]);
     } else if (tasks[i].props.projectTask.status === "DONE") {

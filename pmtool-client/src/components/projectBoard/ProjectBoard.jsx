@@ -54,7 +54,6 @@ function ProjectBoard(props) {
   return (
     <div>
       <br />
-
       {BoardContent}
     </div>
   );

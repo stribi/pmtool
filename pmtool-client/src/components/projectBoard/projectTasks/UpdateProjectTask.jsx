@@ -5,20 +5,34 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getProjectTask,
   selectBacklog,
+  addProjectTask,
   //selectProjectTask,
 } from "./../../backlog/backlogSlice";
+import classnames from "classnames";
 
 function UpdateProjectTask(props) {
   const { backlog_id: b_id, pt_sequence: pt_id } = props.match.params;
   const dispatch = useDispatch();
   //const projectTask = useSelector(selectProjectTask);
-  const { projectTask, status, errors } = useSelector(selectBacklog);
+
+  //status
+  const { projectTask, errors } = useSelector(selectBacklog);
 
   const [form, setFormState] = useState({});
+  const [validationErrors, setValidationErrors] = useState({
+    validationErrors: {},
+  });
 
   useEffect(() => {
     dispatch(getProjectTask({ backlog_id: b_id, pt_sequence: pt_id }));
   }, [dispatch, b_id, pt_id]);
+
+  useEffect(() => {
+    setValidationErrors({
+      summary: errors.summary,
+    });
+  }, [errors]);
+
   useEffect(() => {
     setFormState({
       summary: projectTask.summary,
@@ -36,6 +50,27 @@ function UpdateProjectTask(props) {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const projectTaskToUpdate = {
+      id: projectTask.id,
+      summary: form.summary,
+      acceptanceCriteria: form.acceptanceCriteria,
+      dueDate: form.dueDate,
+      priority: form.priority,
+      status: form.status,
+    };
+    console.log(projectTaskToUpdate);
+    dispatch(
+      addProjectTask({
+        backlog_id: b_id,
+        projectTask: projectTaskToUpdate,
+        history: props.history,
+      })
+    );
+  };
+
   return (
     <div>
       <br />
@@ -50,7 +85,7 @@ function UpdateProjectTask(props) {
       <hr />
       <h2>Update Project Task</h2>
       <br />
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="summary">
           <Form.Row>
             <Col md={2}>
@@ -59,10 +94,18 @@ function UpdateProjectTask(props) {
             <Col>
               <Form.Control
                 type="text"
+                className={classnames("", {
+                  "is-invalid": validationErrors.summary,
+                })}
                 name="summary"
                 value={form.summary || ""}
                 onChange={handleChange}
               />
+              {validationErrors.summary && (
+                <div className="invalid-feedback">
+                  {validationErrors.summary}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
