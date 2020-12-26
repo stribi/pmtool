@@ -64,10 +64,29 @@ export const getProjectTask = createAsyncThunk(
       );
       return response.data;
     } catch (err) {
+      console.log(err.message);
       let error = err;
-      if (!error.response) throw error;
 
+      if (!error.response) throw error;
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// delete Project Task
+export const deleteProjectTask = createAsyncThunk(
+  "backlog/deleteProjectTask",
+  async ({ backlog_id, pt_sequence }, { rejectWithValue }) => {
+    if (window.confirm("Are you sure? Project will be deleted.")) {
+      try {
+        await axios.delete(`/api/v1/backlog/${backlog_id}/${pt_sequence}`);
+        return pt_sequence;
+      } catch (err) {
+        let error = err;
+
+        if (!error.response) throw error;
+        return rejectWithValue(error.response.data);
+      }
     }
   }
 );
@@ -128,6 +147,20 @@ export const backlogSlice = createSlice({
     [updateProjectTask.fulfilled]: (state, action) => {
       state.status = "idle";
       state.errors = {};
+    },
+    [deleteProjectTask.pending]: (state) => {
+      state.status = "deleting";
+    },
+    [deleteProjectTask.rejected]: (state, action) => {
+      state.status = "failed";
+      state.errors = action.payload;
+    },
+    [deleteProjectTask.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.errors = {};
+      state.projectTasks = state.projectTasks.filter(
+        (task) => task.projectSequence !== action.payload
+      );
     },
   },
 });

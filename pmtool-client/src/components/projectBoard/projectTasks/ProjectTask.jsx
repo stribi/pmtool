@@ -1,9 +1,12 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { deleteProjectTask } from "./../../backlog/backlogSlice";
+import { useDispatch } from "react-redux";
 
 function ProjectTask(props) {
   const { projectTask } = props;
+  const dispatch = useDispatch();
 
   let priorityString;
   let priorityClass;
@@ -19,6 +22,15 @@ function ProjectTask(props) {
     priorityClass = "bg-info text-light";
     priorityString = "LOW";
   }
+
+  const handleDelete = () => {
+    dispatch(
+      deleteProjectTask({
+        backlog_id: projectTask.projectIdentifier,
+        pt_sequence: projectTask.projectSequence,
+      })
+    );
+  };
 
   return (
     <Card style={{ marginTop: "10px" }}>
@@ -37,7 +49,11 @@ function ProjectTask(props) {
         >
           Detail
         </Card.Link>
-        <Button style={{ marginLeft: "20px" }} variant="danger">
+        <Button
+          style={{ marginLeft: "20px" }}
+          variant="danger"
+          onClick={handleDelete}
+        >
           Delete
         </Button>
       </Card.Body>
