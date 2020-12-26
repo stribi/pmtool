@@ -73,7 +73,11 @@ function UpdateProjectTask(props) {
     );
   };
 
-  return (
+  return errors.projectNotFound ? (
+    <div className="alert alert-danger text-center mt-3">
+      {errors.projectNotFound}
+    </div>
+  ) : (
     <div>
       <br />
       <Button
