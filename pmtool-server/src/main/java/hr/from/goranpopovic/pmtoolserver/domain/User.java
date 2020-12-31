@@ -1,5 +1,6 @@
 package hr.from.goranpopovic.pmtoolserver.domain;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,10 +14,14 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class User {
+public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -111,5 +116,40 @@ public class User {
 	@PreUpdate
 	protected void onUpdate() {
 		this.updateAt = new Date();
+	}
+
+	@JsonIgnore
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		
+		return null;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }
