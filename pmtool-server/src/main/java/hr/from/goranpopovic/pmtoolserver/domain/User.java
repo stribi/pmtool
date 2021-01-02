@@ -1,13 +1,18 @@
 package hr.from.goranpopovic.pmtoolserver.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
@@ -46,11 +51,16 @@ public class User implements UserDetails {
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date updateAt;
 
+	// OneToMany with Project
+	@OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+	private List<Project> projects = new ArrayList<>();
+	
+	
 	public User() {
 	}
+
 	
 	
-	//OneToMany with Project
 
 	public Long getId() {
 		return id;
@@ -107,6 +117,21 @@ public class User implements UserDetails {
 	public void setUpdateAt(Date updateAt) {
 		this.updateAt = updateAt;
 	}
+	
+
+	public List<Project> getProjects() {
+		return projects;
+	}
+
+
+
+
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
+	}
+
+
+
 
 	@PrePersist
 	protected void onCreate() {
@@ -118,36 +143,40 @@ public class User implements UserDetails {
 		this.updateAt = new Date();
 	}
 
-	@JsonIgnore
+	
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
+
 		return null;
 	}
 
-	@JsonIgnore
+	
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
-	@JsonIgnore
+	
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonLocked() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
-
 	@Override
+	@JsonIgnore
 	public boolean isCredentialsNonExpired() {
 		// TODO Auto-generated method stub
 		return true;
 	}
 
-	@JsonIgnore
+	
 	@Override
+	@JsonIgnore
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
