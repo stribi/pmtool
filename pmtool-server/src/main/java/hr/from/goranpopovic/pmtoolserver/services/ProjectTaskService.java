@@ -59,11 +59,17 @@ public class ProjectTaskService {
 
 	}
 
-	public Iterable<ProjectTask> findBacklogById(String id) {
+	public Iterable<ProjectTask> findBacklogById(String id, String username) {
+		
+		projectService.findProjectByIdentifier(id, username);
+		return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
+		
+		/*
 		Project project = projectRepository.findByProjectIdentifier(id);
 		if (project == null)
 			throw new ProjectNotFoundException("Project with ID: '" + id + "' does not exist");
 		return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
+		*/
 	}
 
 	public ProjectTask findProjectTaskByProjectSequence(String backlog_id, String sequence) {
