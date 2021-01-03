@@ -1,5 +1,7 @@
 package hr.from.goranpopovic.pmtoolserver.controllers;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +34,13 @@ public class BacklogController {
 
 	@PostMapping("/{backlog_id}")
 	public ResponseEntity<?> addProjectTaskToBacklog(@Valid @RequestBody ProjectTask projectTask, BindingResult result,
-			@PathVariable String backlog_id) {
+			@PathVariable String backlog_id, Principal principal) {
 
 		ResponseEntity<?> errorMap = mapValidationService.MapValidationService(result);
 		if (errorMap != null)
 			return errorMap;
 
-		ProjectTask projectTaskToAdd = projectTaskService.addProjectTask(backlog_id, projectTask);
+		ProjectTask projectTaskToAdd = projectTaskService.addProjectTask(backlog_id, projectTask, principal.getName());
 		return new ResponseEntity<ProjectTask>(projectTaskToAdd, HttpStatus.CREATED);
 
 	}

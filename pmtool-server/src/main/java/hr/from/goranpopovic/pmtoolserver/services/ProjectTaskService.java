@@ -22,12 +22,15 @@ public class ProjectTaskService {
 
 	@Autowired
 	private ProjectRepository projectRepository;
+	
+	@Autowired
+	private ProjectService projectService;
 
-	public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
+	public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String username) {
 
-		try {
+	
 			// PTs to be added to a specific project, project != null, BL exists
-			Backlog backlog = backlogRepository.findByProjectIdentifier(projectIdentifier);
+			Backlog backlog = projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog(); //backlogRepository.findByProjectIdentifier(projectIdentifier);
 			// set the BL to PT
 			projectTask.setBacklog(backlog);
 			// we want our project sequence to be like: IDPRO-1 IDPRO-2 ...100 101
@@ -41,7 +44,7 @@ public class ProjectTaskService {
 
 			// INTITIAL priority when priority null
 
-			if (projectTask.getPriority() == null) {
+			if (projectTask.getPriority() == null || projectTask.getPriority() == 0) {
 				projectTask.setPriority(3);
 			}
 
@@ -52,9 +55,7 @@ public class ProjectTaskService {
 
 			return projectTaskRepository.save(projectTask);
 
-		} catch (Exception e) {
-			throw new ProjectNotFoundException("Project not Found");
-		}
+	
 
 	}
 
