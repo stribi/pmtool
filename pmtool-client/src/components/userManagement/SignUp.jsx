@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Col } from "react-bootstrap";
-import { registerUser } from "./usersSlice";
-import { useDispatch } from "react-redux";
+import { registerUser, selectErrors } from "./usersSlice";
+import { useDispatch, useSelector } from "react-redux";
+import classnames from "classnames";
 
 function SignUp(props) {
   const dispatch = useDispatch();
+  const errors = useSelector(selectErrors);
   const [form, setFormState] = useState({
     fullName: "",
     username: "",
     password: "",
     confirmPassword: "",
   });
+
+  const [validationErrors, setValidationErrors] = useState({
+    validationErrors: {},
+  });
+
+  useEffect(() => {
+    setValidationErrors({
+      fullName: errors.fullName,
+      username: errors.username,
+      password: errors.password,
+      confirmPassword: errors.confirmPassword,
+    });
+  }, [errors]);
 
   const handleChange = (e) => {
     setFormState({
@@ -52,10 +67,18 @@ function SignUp(props) {
             <Col>
               <Form.Control
                 type="text"
+                className={classnames("", {
+                  "is-invalid": validationErrors.fullName,
+                })}
                 name="fullName"
                 value={form.fullName}
                 onChange={handleChange}
               />
+              {validationErrors.fullName && (
+                <div className="invalid-feedback">
+                  {validationErrors.fullName}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
@@ -68,11 +91,19 @@ function SignUp(props) {
               {" "}
               <Form.Control
                 type="email"
+                className={classnames("", {
+                  "is-invalid": validationErrors.username,
+                })}
                 name="username"
                 autoComplete="username"
                 value={form.username}
                 onChange={handleChange}
               />
+              {validationErrors.username && (
+                <div className="invalid-feedback">
+                  {validationErrors.username}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
@@ -85,11 +116,19 @@ function SignUp(props) {
               {" "}
               <Form.Control
                 type="password"
+                className={classnames("", {
+                  "is-invalid": validationErrors.password,
+                })}
                 name="password"
                 autoComplete="current-password"
                 value={form.password}
                 onChange={handleChange}
               />
+              {validationErrors.password && (
+                <div className="invalid-feedback">
+                  {validationErrors.password}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
@@ -102,11 +141,19 @@ function SignUp(props) {
               {" "}
               <Form.Control
                 type="password"
+                className={classnames("", {
+                  "is-invalid": validationErrors.confirmPassword,
+                })}
                 name="confirmPassword"
                 autoComplete="confirm-password"
                 value={form.confirmPassword}
                 onChange={handleChange}
               />
+              {validationErrors.confirmPassword && (
+                <div className="invalid-feedback">
+                  {validationErrors.confirmPassword}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>

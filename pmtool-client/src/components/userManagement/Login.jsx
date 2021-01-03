@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 
 function Login(props) {
+  const dispatch = useDispatch();
+
+  const [form, setFormState] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormState({
+      ...form,
+      [e.target.name]: [e.target.value],
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("logged..hip hip hurraaa");
@@ -13,14 +28,20 @@ function Login(props) {
       <p>Login to your account</p>
       <br />
       <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="email">
+        <Form.Group controlId="username">
           <Form.Row>
             <Col md={2}>
               <Form.Label>Email</Form.Label>
             </Col>
             <Col>
               {" "}
-              <Form.Control type="email" name="email" autoComplete="username" />
+              <Form.Control
+                type="email"
+                name="username"
+                autoComplete="username"
+                value={form.username}
+                onChange={handleChange}
+              />
             </Col>
           </Form.Row>
         </Form.Group>
@@ -35,6 +56,8 @@ function Login(props) {
                 type="password"
                 name="password"
                 autoComplete="current-password"
+                value={form.password}
+                onChange={handleChange}
               />
             </Col>
           </Form.Row>
