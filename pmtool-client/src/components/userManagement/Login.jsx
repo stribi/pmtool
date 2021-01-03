@@ -2,13 +2,17 @@ import React from "react";
 import { Button, Form, Col } from "react-bootstrap";
 
 function Login(props) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("logged..hip hip hurraaa");
+  };
   return (
     <div>
       <br />
       <h2>Login</h2>
       <p>Login to your account</p>
       <br />
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="email">
           <Form.Row>
             <Col md={2}>
@@ -16,7 +20,7 @@ function Login(props) {
             </Col>
             <Col>
               {" "}
-              <Form.Control type="email" name="email" />
+              <Form.Control type="email" name="email" autoComplete="username" />
             </Col>
           </Form.Row>
         </Form.Group>
@@ -27,7 +31,11 @@ function Login(props) {
             </Col>
             <Col>
               {" "}
-              <Form.Control type="password" name="password" />
+              <Form.Control
+                type="password"
+                name="password"
+                autoComplete="current-password"
+              />
             </Col>
           </Form.Row>
         </Form.Group>
