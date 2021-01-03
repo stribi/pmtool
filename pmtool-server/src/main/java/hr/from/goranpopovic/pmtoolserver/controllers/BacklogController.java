@@ -52,27 +52,27 @@ public class BacklogController {
 	}
 
 	@GetMapping("/{backlog_id}/{pt_sequence}")
-	public ResponseEntity<?> getPTByProjectSequence(@PathVariable String backlog_id, @PathVariable String pt_sequence) {
-		ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backlog_id, pt_sequence);
+	public ResponseEntity<?> getPTByProjectSequence(@PathVariable String backlog_id, @PathVariable String pt_sequence, Principal principal) {
+		ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backlog_id, pt_sequence, principal.getName());
 		return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);
 	}
 
 	@PatchMapping("/{backlog_id}/{pt_sequence}")
 	public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask, BindingResult result,
-			@PathVariable String backlog_id, @PathVariable String pt_sequence) {
+			@PathVariable String backlog_id, @PathVariable String pt_sequence, Principal principal) {
 		
 		ResponseEntity<?> errorMap = mapValidationService.MapValidationService(result);
 		if (errorMap != null)
 			return errorMap;
 		
-		ProjectTask updatedProjectTask = projectTaskService.updateByProjectSequence(projectTask, backlog_id, pt_sequence);
+		ProjectTask updatedProjectTask = projectTaskService.updateByProjectSequence(projectTask, backlog_id, pt_sequence, principal.getName());
 		
 		return new ResponseEntity<ProjectTask>(updatedProjectTask, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{backlog_id}/{pt_sequence}")
-	public ResponseEntity<?> deleteProjectTask(@PathVariable String backlog_id, @PathVariable String pt_sequence){
-		projectTaskService.deleteProjectTaskByProjectSequence(backlog_id, pt_sequence);
+	public ResponseEntity<?> deleteProjectTask(@PathVariable String backlog_id, @PathVariable String pt_sequence, Principal principal){
+		projectTaskService.deleteProjectTaskByProjectSequence(backlog_id, pt_sequence, principal.getName());
 		
 		return new ResponseEntity<String>("Project Task with ID: '" + pt_sequence + "' was deleted successfully", HttpStatus.OK);
 		
