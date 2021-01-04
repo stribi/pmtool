@@ -27,7 +27,6 @@ import static hr.from.goranpopovic.pmtoolserver.security.SecurityConstants.TOKEN
 
 @RestController
 @RequestMapping("/api/v1/users")
-@CrossOrigin
 public class UserController {
 
 	@Autowired

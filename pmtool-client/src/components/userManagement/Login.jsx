@@ -1,25 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, selectErrors } from "./usersSlice";
+import classnames from "classnames";
 
 function Login(props) {
   const dispatch = useDispatch();
+  const errors = useSelector(selectErrors);
 
   const [form, setFormState] = useState({
     username: "",
     password: "",
   });
 
+  const [validationErrors, setValidationErrors] = useState({
+    validationErrors: {},
+  });
+
+  useEffect(() => {
+    setValidationErrors({
+      username: errors.username,
+      password: errors.password,
+    });
+  }, [errors]);
+
   const handleChange = (e) => {
     setFormState({
       ...form,
-      [e.target.name]: [e.target.value],
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("logged..hip hip hurraaa");
+
+    const LoginRequest = {
+      username: form.username,
+      password: form.password,
+    };
+    console.log(LoginRequest);
+    dispatch(loginUser({ LoginRequest }));
   };
   return (
     <div>
@@ -37,11 +57,19 @@ function Login(props) {
               {" "}
               <Form.Control
                 type="email"
+                className={classnames("", {
+                  "is-invalid": validationErrors.username,
+                })}
                 name="username"
                 autoComplete="username"
                 value={form.username}
                 onChange={handleChange}
               />
+              {validationErrors.username && (
+                <div className="invalid-feedback">
+                  {validationErrors.username}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
@@ -54,11 +82,19 @@ function Login(props) {
               {" "}
               <Form.Control
                 type="password"
+                className={classnames("", {
+                  "is-invalid": validationErrors.password,
+                })}
                 name="password"
                 autoComplete="current-password"
                 value={form.password}
                 onChange={handleChange}
               />
+              {validationErrors.password && (
+                <div className="invalid-feedback">
+                  {validationErrors.password}
+                </div>
+              )}
             </Col>
           </Form.Row>
         </Form.Group>
