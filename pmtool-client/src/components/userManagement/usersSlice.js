@@ -95,6 +95,7 @@ export const usersSlice = createSlice({
 });
 
 export const selectUser = (state) => state.users.user;
+export const selectToken = (state) => state.users.validToken;
 export const selectErrors = (state) => state.users.errors;
 export const selectUsers = (state) => state.users;
 export default usersSlice.reducer;

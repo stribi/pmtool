@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // "http://localhost:8080/api/v1/project/all"
+/*
 export const getProjects = createAsyncThunk(
   "project/getProjects",
   (endpoint) => {
@@ -11,6 +12,23 @@ export const getProjects = createAsyncThunk(
         return response.json();
       })
       .then((json) => json);
+  }
+);
+*/
+
+export const getProjects = createAsyncThunk(
+  "project/getProjects",
+  async (rejectWithValue) => {
+    try {
+      const response = await axios.get("/api/v1/project/all");
+      return response.data;
+    } catch (error) {
+      if (!error.response) {
+        throw error;
+      }
+
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
@@ -72,6 +90,7 @@ export const projectSlice = createSlice({
     },
     [getProjects.rejected]: (state, action) => {
       state.status = "failed";
+      //state.errors = action.payload;
     },
     [getProjects.fulfilled]: (state, action) => {
       state.status = "succeeded";

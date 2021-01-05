@@ -9,7 +9,8 @@ function Dashboard(props) {
   const projects = useSelector(selectProjects);
 
   useEffect(() => {
-    dispatch(getProjects("http://localhost:8080/api/v1/project/all"));
+    //"http://localhost:8080/api/v1/project/all"
+    dispatch(getProjects());
   }, [dispatch]);
   return (
     <div md={12} className="text-align-left margin-top-bottom">
