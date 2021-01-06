@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Col } from "react-bootstrap";
-import { registerUser, selectErrors } from "./usersSlice";
+import { registerUser, selectErrors, selectToken } from "./usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 import classnames from "classnames";
 
 function SignUp(props) {
   const dispatch = useDispatch();
   const errors = useSelector(selectErrors);
+  const token = useSelector(selectToken);
   const [form, setFormState] = useState({
     fullName: "",
     username: "",
@@ -25,7 +26,10 @@ function SignUp(props) {
       password: errors.password,
       confirmPassword: errors.confirmPassword,
     });
-  }, [errors]);
+    if (token) {
+      props.history.push("/dashboard");
+    }
+  }, [errors, token, props.history]);
 
   const handleChange = (e) => {
     setFormState({

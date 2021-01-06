@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Dashboard from "./components/Dashboard";
@@ -21,6 +21,9 @@ import {
   logoutUser,
 } from "../src/components/userManagement/usersSlice";
 import store from "./app/store";
+import SecureRoute from "./components/userManagement/SecureRoute";
+import { useSelector } from "react-redux";
+import { selectToken } from "./components/userManagement/usersSlice";
 
 const jwtToken = localStorage.jwtToken;
 
@@ -39,6 +42,7 @@ if (jwtToken) {
 }
 
 function App() {
+  let token = useSelector(selectToken);
   return (
     <Router>
       <Header />
@@ -52,16 +56,39 @@ function App() {
         {
           //Private routes
         }
-
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route path="/addProject" component={AddProject} />
-        <Route path="/updateProject/:id" component={UpdateProject} />
-        <Route path="/projectBoard/:id" component={ProjectBoard} />
-        <Route path="/addProjectTask/:id" component={AddProjectTask} />
-        <Route
-          path="/updateProjectTask/:backlog_id/:pt_sequence"
-          component={UpdateProjectTask}
-        />
+        <Switch>
+          <SecureRoute
+            isAuthenticated={token}
+            exact
+            path="/dashboard"
+            component={Dashboard}
+          />
+          <SecureRoute
+            isAuthenticated={token}
+            path="/addProject"
+            component={AddProject}
+          />
+          <SecureRoute
+            isAuthenticated={token}
+            path="/updateProject/:id"
+            component={UpdateProject}
+          />
+          <SecureRoute
+            isAuthenticated={token}
+            path="/projectBoard/:id"
+            component={ProjectBoard}
+          />
+          <SecureRoute
+            isAuthenticated={token}
+            path="/addProjectTask/:id"
+            component={AddProjectTask}
+          />
+          <SecureRoute
+            isAuthenticated={token}
+            path="/updateProjectTask/:backlog_id/:pt_sequence"
+            component={UpdateProjectTask}
+          />
+        </Switch>
       </Container>
     </Router>
   );

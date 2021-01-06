@@ -1,8 +1,17 @@
 import { Button, Container, Row, Col } from "react-bootstrap";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectToken } from "../userManagement/usersSlice";
 
 function Landing(props) {
+  const token = useSelector(selectToken);
+
+  useEffect(() => {
+    if (token) {
+      props.history.push("/dashboard");
+    }
+  });
   return (
     <Container style={{ marginTop: "30px" }}>
       <Row>
