@@ -14,6 +14,30 @@ import AddProjectTask from "./components/projectBoard/projectTasks/AddProjectTas
 import UpdateProjectTask from "./components/projectBoard/projectTasks/UpdateProjectTask";
 import Landing from "./components/layout/Landing";
 
+import jwt_decode from "jwt-decode";
+import setJWTToken from "./components/userManagement/setJWTToken";
+import {
+  setUser,
+  logoutUser,
+} from "../src/components/userManagement/usersSlice";
+import store from "./app/store";
+
+const jwtToken = localStorage.jwtToken;
+
+if (jwtToken) {
+  setJWTToken(jwtToken);
+  const decoded_jwtToken = jwt_decode(jwtToken);
+  //store.dispatch(setCurrentUser(decoded_jwtToken));
+  store.dispatch(setUser(decoded_jwtToken));
+
+  const currentTime = Date.now() / 1000;
+  if (decoded_jwtToken.exp < currentTime) {
+    console.log("Token expired");
+    store.dispatch(logoutUser());
+    window.location.href = "/";
+  }
+}
+
 function App() {
   return (
     <Router>

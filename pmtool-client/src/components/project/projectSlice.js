@@ -116,7 +116,7 @@ export const projectSlice = createSlice({
     },
     [deleteProject.fulfilled]: (state, action) => {
       state.status = "deleted";
-      console.log(action.payload);
+      //console.log(action.payload);
       state.projects = state.projects.filter(
         (project) => project.projectIdentifier !== action.payload
       );

@@ -12,6 +12,7 @@ function Landing(props) {
             Create your account to join active projects or start your own
           </p>
           <hr />
+
           <Button
             as={Link}
             to="register"
@@ -28,6 +29,16 @@ function Landing(props) {
           >
             Login
           </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="text-center">
+          {" "}
+          <img
+            src="/img/pmtool-cover.png"
+            alt="Project Management  Tool"
+            style={{ width: "600px" }}
+          />
         </Col>
       </Row>
     </Container>

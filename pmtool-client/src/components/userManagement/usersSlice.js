@@ -49,6 +49,12 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const logoutUser = () => (dispatch) => {
+  localStorage.removeItem("jwtToken");
+  setJWTToken(false);
+  dispatch(setUser());
+};
+
 const booleanActionPayload = (payload) => {
   if (payload) {
     return true;
@@ -65,7 +71,12 @@ export const usersSlice = createSlice({
     status: "idle",
     validToken: false,
   },
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      state.validToken = booleanActionPayload(action.payload);
+      state.user = action.payload;
+    },
+  },
   extraReducers: {
     [registerUser.pending]: (state) => {
       state.status = "loading";
@@ -93,9 +104,15 @@ export const usersSlice = createSlice({
     },
   },
 });
+/*
+export const setCurrentUser = (token) => (dispatch) => {
+  dispatch(setUser(token));
+};
+*/
 
 export const selectUser = (state) => state.users.user;
 export const selectToken = (state) => state.users.validToken;
 export const selectErrors = (state) => state.users.errors;
 export const selectUsers = (state) => state.users;
+export const { setUser } = usersSlice.actions;
 export default usersSlice.reducer;

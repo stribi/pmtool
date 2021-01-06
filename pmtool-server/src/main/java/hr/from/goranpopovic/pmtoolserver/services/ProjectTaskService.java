@@ -4,24 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hr.from.goranpopovic.pmtoolserver.domain.Backlog;
-import hr.from.goranpopovic.pmtoolserver.domain.Project;
 import hr.from.goranpopovic.pmtoolserver.domain.ProjectTask;
 import hr.from.goranpopovic.pmtoolserver.exceptions.ProjectNotFoundException;
-import hr.from.goranpopovic.pmtoolserver.repositories.BacklogRepository;
-import hr.from.goranpopovic.pmtoolserver.repositories.ProjectRepository;
 import hr.from.goranpopovic.pmtoolserver.repositories.ProjectTaskRepository;
 
 @Service
 public class ProjectTaskService {
 
 	@Autowired
-	private BacklogRepository backlogRepository;
-
-	@Autowired
 	private ProjectTaskRepository projectTaskRepository;
-
-	@Autowired
-	private ProjectRepository projectRepository;
 	
 	@Autowired
 	private ProjectService projectService;
